@@ -1,17 +1,17 @@
 import React from "react";
 import { render } from "react-dom";
-import "./style.css";
 
-import Header from "./components/Header";
-import Profile from "./components/Profile";
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+import reducer from "./reducers";
 
-const App = () => (
-  <div>
-    <Header />
-    <div className="container">
-      <Profile user="frankie33" />
-    </div>
-  </div>
+import App from "./App";
+
+let store = createStore(reducer);
+
+render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById("root")
 );
-
-render(<App />, document.getElementById("root"));

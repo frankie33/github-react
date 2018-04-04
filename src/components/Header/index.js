@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 
 class Header extends Component {
   constructor(props) {
@@ -9,11 +10,6 @@ class Header extends Component {
     };
 
     this.handleChange = this.handleChange.bind(this);
-  }
-
-  handleChange(e) {
-    this.setState({ username: e.target.value });
-    console.log(this.state.username);
   }
 
   render() {
@@ -48,6 +44,7 @@ class Header extends Component {
                 className="form-control mr-sm-2"
                 type="text"
                 placeholder="Search"
+                value={this.props.user}
                 onChange={this.handleChange}
               />
             </div>
