@@ -5,11 +5,7 @@ class Repos extends Component {
   componentDidMount() {
     let { dispatch } = this.props;
 
-    fetch(
-      `https://api.github.com/users/${
-        this.props.username
-      }/repos?access_token=2c093c530e194073e297f8323a3aeb4871e3c993`
-    )
+    fetch(`https://api.github.com/users/${this.props.username}/repos`)
       .then(res => res.json())
       .then(repos => {
         dispatch({ type: "UPDATE_REPOS", repos });
