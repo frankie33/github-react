@@ -1,27 +1,25 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 
 class Repos extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      repos: []
-    };
-  }
-
   componentDidMount() {
-    fetch(`https://api.github.com/users/${this.props.user}/repos`)
-      .then(res => res.json())
-      .then(repos => this.setState({ repos: repos }))
-      .catch(err => console.log(err));
+    let { dispatch } = this.props;
 
-    console.log(this.state.repos);
+    fetch(
+      `https://api.github.com/users/${
+        this.props.username
+      }/repos?access_token=2c093c530e194073e297f8323a3aeb4871e3c993`
+    )
+      .then(res => res.json())
+      .then(repos => {
+        dispatch({ type: "UPDATE_REPOS", repos });
+      });
   }
 
   render() {
     return (
       <div className="row">
-        {this.state.repos.map(repo => (
+        {this.props.repos.map(repo => (
           <div key={repo.id} className="col-md-4">
             <div className="card mb-3">
               <div className="card-body">
@@ -43,4 +41,12 @@ class Repos extends Component {
   }
 }
 
-export default Repos;
+const mapStateToProps = state => {
+  return {
+    username: state.username,
+    profile: state.profile,
+    repos: state.repos
+  };
+};
+
+export default connect(mapStateToProps)(Repos);

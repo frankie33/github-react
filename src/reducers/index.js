@@ -1,7 +1,8 @@
 import Redux from "redux";
 
 let initialState = {
-  username: "",
+  username: "frankie33",
+  profile: {},
   repos: []
 };
 
@@ -11,6 +12,16 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         username: action.username
+      };
+    case "UPDATE_PROFILE":
+      return {
+        ...state,
+        profile: action.profile
+      };
+    case "UPDATE_REPOS":
+      return {
+        ...state,
+        repos: action.repos
       };
     default:
       return state;

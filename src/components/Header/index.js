@@ -2,15 +2,36 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 class Header extends Component {
-  constructor(props) {
-    super(props);
+  handleChange = e => {
+    let { dispatch } = this.props;
+    dispatch({ type: "UPDATE_USERNAME", username: e.target.value });
+  };
 
-    this.state = {
-      username: ""
-    };
+  fetchRepos = () => {
+    let { dispatch } = this.props;
 
-    this.handleChange = this.handleChange.bind(this);
-  }
+    fetch(
+      `https://api.github.com/users/${
+        this.props.username
+      }/repos?access_token=2c093c530e194073e297f8323a3aeb4871e3c993`
+    )
+      .then(res => res.json())
+      .then(repos => {
+        dispatch({ type: "UPDATE_REPOS", repos });
+      });
+
+    fetch(
+      `https://api.github.com/users/${
+        this.props.username
+      }?access_token=2c093c530e194073e297f8323a3aeb4871e3c993`
+    )
+      .then(res => res.json())
+      .then(profile => {
+        dispatch({ type: "UPDATE_PROFILE", profile });
+      });
+
+    console.log(this.props);
+  };
 
   render() {
     return (
@@ -34,7 +55,7 @@ class Header extends Component {
             <ul className="navbar-nav mr-auto">
               <li className="nav-item active">
                 <a className="nav-link" href="#">
-                  Home <span className="sr-only">(current)</span>
+                  <span className="sr-only">Home</span>
                 </a>
               </li>
             </ul>
@@ -44,9 +65,15 @@ class Header extends Component {
                 className="form-control mr-sm-2"
                 type="text"
                 placeholder="Search"
-                value={this.props.user}
+                value={this.props.username}
                 onChange={this.handleChange}
               />
+              <button
+                className="btn btn-outline-success my-2 my-sm-0"
+                onClick={this.fetchRepos}
+              >
+                Search
+              </button>
             </div>
           </div>
         </nav>
@@ -55,4 +82,12 @@ class Header extends Component {
   }
 }
 
-export default Header;
+const mapStateToProps = state => {
+  return {
+    username: state.username,
+    profile: state.profile,
+    repos: state.repos
+  };
+};
+
+export default connect(mapStateToProps)(Header);

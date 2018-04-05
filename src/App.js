@@ -6,24 +6,26 @@ import Header from "./components/Header";
 import Profile from "./components/Profile";
 
 class App extends Component {
-  handleChange = e => {
+  componentDidMount() {
     let { dispatch } = this.props;
-    dispatch({ type: "UPDATE_USERNAME", username: e.target.value });
-    console.log(this.props);
-  };
 
+    fetch(
+      `https://api.github.com/users/${
+        this.props.username
+      }?access_token=2c093c530e194073e297f8323a3aeb4871e3c993`
+    )
+      .then(res => res.json())
+      .then(profile => {
+        dispatch({ type: "UPDATE_PROFILE", profile });
+      });
+    console.log("Profiles:", this.props.profile);
+  }
   render() {
     return (
       <div>
-        {this.props.username}
-        <input
-          type="text"
-          onChange={this.handleChange}
-          value={this.props.user}
-        />
-        <Header user={this.props.username} />
+        <Header />
         <div className="container">
-          <Profile user="frankie33" />
+          <Profile />
         </div>
       </div>
     );
@@ -33,6 +35,7 @@ class App extends Component {
 const mapStateToProps = state => {
   return {
     username: state.username,
+    profile: state.profile,
     repos: state.repos
   };
 };
